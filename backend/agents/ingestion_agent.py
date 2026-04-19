@@ -3,7 +3,7 @@ import os
 import fitz  # PyMuPDF
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_chroma import Chroma
-from langchain_community.embeddings import HuggingFaceEmbeddings
+from langchain_community.embeddings import HuggingFaceEmbeddings, HuggingFaceInferenceAPIEmbeddings
 from langchain_core.documents import Document
 
 
@@ -43,7 +43,13 @@ class IngestPDFAgent:
             for chunk in chunks
         ]
 
-        embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
+        hf_token = os.getenv("HUGGINGFACE_API_KEY")
+        if hf_token:
+            embeddings = HuggingFaceInferenceAPIEmbeddings(
+                api_key=hf_token, model_name="sentence-transformers/all-MiniLM-L6-v2"
+            )
+        else:
+            embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
         Chroma.from_documents(
             documents=documents,
             embedding=embeddings,
