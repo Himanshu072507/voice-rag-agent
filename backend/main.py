@@ -25,8 +25,9 @@ app.add_middleware(
         "https://voice-rag-agent.vercel.app",
         "http://localhost:3000",
     ],
-    allow_methods=["GET", "POST"],
-    allow_headers=["Content-Type"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+    allow_credentials=True,
 )
 
 app.mount("/audio", StaticFiles(directory=AUDIO_DIR), name="audio")
