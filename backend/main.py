@@ -22,10 +22,7 @@ os.makedirs(AUDIO_DIR, exist_ok=True)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "https://voice-rag-agent.vercel.app",
-        "http://localhost:3000",
-    ],
+    allow_origins=["http://localhost:3000"],
     allow_methods=["*"],
     allow_headers=["*"],
     allow_credentials=True,
