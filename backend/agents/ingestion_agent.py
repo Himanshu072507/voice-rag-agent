@@ -15,13 +15,17 @@ class IngestPDFAgent:
         if not pdf_bytes:
             raise ValueError("PDF is empty")
 
-        doc = fitz.open(stream=pdf_bytes, filetype="pdf")
+        try:
+            doc = fitz.open(stream=pdf_bytes, filetype="pdf")
+        except Exception as e:
+            raise ValueError(f"Could not parse PDF: {e}") from e
         raw_text = ""
         for page in doc:
             raw_text += page.get_text()
+        doc.close()
 
         if not raw_text.strip():
-            raise ValueError("PDF is empty")
+            raise ValueError("PDF contains no extractable text (may be image-only)")
 
         splitter = RecursiveCharacterTextSplitter(
             chunk_size=500,
