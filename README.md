@@ -1,6 +1,6 @@
 Goal: Build a multi-agent voice RAG system where users upload a PDF, chat with it via a GPT-style UI, and receive answers as both text and spoken audio.
 
-Architecture: Four specialized LangChain LCEL agents in a sequential pipeline — PDF Ingestion → Retrieval → Answer Generation → TTS. FastAPI backend on Railway with ChromaDB vector store; Next.js 15 frontend on Vercel.
+Architecture: Four specialized LangChain LCEL agents in a sequential pipeline — PDF Ingestion → Retrieval → Answer Generation → TTS. FastAPI backend on Railway with ChromaDB vector store; Next.js 15 frontend on Vercel (optional).
 
 Tech Stack
 
