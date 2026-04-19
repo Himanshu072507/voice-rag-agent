@@ -21,9 +21,12 @@ os.makedirs(AUDIO_DIR, exist_ok=True)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_origins=[
+        "https://voice-rag-agent.vercel.app",
+        "http://localhost:3000",
+    ],
+    allow_methods=["GET", "POST"],
+    allow_headers=["Content-Type"],
 )
 
 app.mount("/audio", StaticFiles(directory=AUDIO_DIR), name="audio")
