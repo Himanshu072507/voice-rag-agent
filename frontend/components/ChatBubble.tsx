@@ -1,6 +1,5 @@
 // frontend/components/ChatBubble.tsx
 import { AudioPlayer } from "./AudioPlayer";
-import { getAudioURL } from "@/lib/api";
 
 export interface Message {
   id: string;
@@ -26,9 +25,7 @@ export function ChatBubble({ message }: ChatBubbleProps) {
         }`}
       >
         <p className="text-sm leading-relaxed">{message.text}</p>
-        {!isUser && message.audio_url && (
-          <AudioPlayer audioUrl={getAudioURL(message.audio_url)} />
-        )}
+        {!isUser && <AudioPlayer text={message.text} />}
       </div>
     </div>
   );

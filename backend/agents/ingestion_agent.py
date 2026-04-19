@@ -3,7 +3,7 @@ import os
 import fitz  # PyMuPDF
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_chroma import Chroma
-from langchain_openai import OpenAIEmbeddings
+from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_core.documents import Document
 
 
@@ -17,6 +17,12 @@ class IngestPDFAgent:
 
         try:
             doc = fitz.open(stream=pdf_bytes, filetype="pdf")
+            if doc.is_encrypted:
+                if not doc.authenticate(""):
+                    doc.close()
+                    raise ValueError("PDF is password-protected and cannot be read")
+        except ValueError:
+            raise
         except Exception as e:
             raise ValueError(f"Could not parse PDF: {e}") from e
         raw_text = ""
@@ -37,7 +43,7 @@ class IngestPDFAgent:
             for chunk in chunks
         ]
 
-        embeddings = OpenAIEmbeddings(model="text-embedding-3-small")
+        embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
         Chroma.from_documents(
             documents=documents,
             embedding=embeddings,

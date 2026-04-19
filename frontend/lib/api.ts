@@ -16,11 +16,15 @@ export async function uploadPDF(file: File): Promise<{ session_id: string }> {
 export async function sendChat(
   session_id: string,
   query: string,
-  message_id: string
+  message_id: string,
+  groqApiKey?: string
 ): Promise<{ answer_text: string; audio_url: string | null }> {
+  const headers: Record<string, string> = { "Content-Type": "application/json" };
+  if (groqApiKey) headers["X-Groq-Api-Key"] = groqApiKey;
+
   const res = await fetch(`${BACKEND_URL}/chat`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers,
     body: JSON.stringify({ session_id, query, message_id }),
   });
   if (!res.ok) {
@@ -28,9 +32,4 @@ export async function sendChat(
     throw new Error(err.detail ?? "Chat request failed");
   }
   return res.json();
-}
-
-export function getAudioURL(audio_url: string): string {
-  if (audio_url.startsWith("http")) return audio_url;
-  return `${BACKEND_URL}${audio_url}`;
 }

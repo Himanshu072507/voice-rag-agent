@@ -1,6 +1,6 @@
 import os
 from langchain_chroma import Chroma
-from langchain_openai import OpenAIEmbeddings
+from langchain_community.embeddings import HuggingFaceEmbeddings
 
 
 class RetrievalAgent:
@@ -8,7 +8,7 @@ class RetrievalAgent:
         self.chroma_dir = chroma_dir or os.getenv("CHROMA_DIR", "./chroma_db")
 
     def run(self, query: str, session_id: str, k: int = 5) -> list[str]:
-        embeddings = OpenAIEmbeddings(model="text-embedding-3-small")
+        embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
         vectorstore = Chroma(
             collection_name=f"session_{session_id}",
             embedding_function=embeddings,

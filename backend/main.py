@@ -1,7 +1,8 @@
 # backend/main.py
 import os
 import uuid
-from fastapi import FastAPI, UploadFile, File, HTTPException
+from typing import Optional
+from fastapi import FastAPI, UploadFile, File, HTTPException, Header
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
@@ -55,12 +56,19 @@ async def upload_pdf(file: UploadFile = File(...)):
         agent.run(pdf_bytes=pdf_bytes, session_id=session_id)
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        msg = str(e)
+        if "insufficient_quota" in msg or "quota" in msg.lower():
+            raise HTTPException(status_code=402, detail="OpenAI quota exceeded. Please add credits at platform.openai.com.")
+        if "authentication" in msg.lower() or "api key" in msg.lower() or "invalid_api_key" in msg:
+            raise HTTPException(status_code=401, detail="Invalid OpenAI API key.")
+        raise HTTPException(status_code=500, detail=f"Ingestion failed: {msg}")
 
     return {"session_id": session_id}
 
 
 @app.post("/chat")
-async def chat(request: ChatRequest):
+async def chat(request: ChatRequest, x_groq_api_key: Optional[str] = Header(None)):
     try:
         retrieval_agent = RetrievalAgent()
         chunks = retrieval_agent.run(query=request.query, session_id=request.session_id)
@@ -70,7 +78,7 @@ async def chat(request: ChatRequest):
             raise HTTPException(status_code=404, detail="Session not found. Please upload a PDF first.")
         raise HTTPException(status_code=502, detail="Failed to retrieve context.")
 
-    answer_agent = AnswerAgent()
+    answer_agent = AnswerAgent(api_key=x_groq_api_key)
     answer_text = answer_agent.run(query=request.query, chunks=chunks)
 
     tts_agent = TTSAgent()
