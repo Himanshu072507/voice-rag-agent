@@ -60,8 +60,11 @@ async def chat(request: ChatRequest):
     try:
         retrieval_agent = RetrievalAgent()
         chunks = retrieval_agent.run(query=request.query, session_id=request.session_id)
-    except Exception:
-        raise HTTPException(status_code=404, detail="Session not found. Please upload a PDF first.")
+    except (ValueError, KeyError, Exception) as e:
+        error_msg = str(e).lower()
+        if any(kw in error_msg for kw in ("collection", "not found", "does not exist", "no such")):
+            raise HTTPException(status_code=404, detail="Session not found. Please upload a PDF first.")
+        raise HTTPException(status_code=502, detail="Failed to retrieve context.")
 
     answer_agent = AnswerAgent()
     answer_text = answer_agent.run(query=request.query, chunks=chunks)
@@ -73,8 +76,13 @@ async def chat(request: ChatRequest):
             session_id=request.session_id,
             message_id=request.message_id,
         )
-        relative_path = os.path.relpath(file_path, AUDIO_DIR)
-        audio_url = f"/audio/{relative_path}"
+        abs_file_path = os.path.abspath(file_path)
+        abs_audio_dir = os.path.abspath(AUDIO_DIR)
+        if not abs_file_path.startswith(abs_audio_dir + os.sep):
+            audio_url = None
+        else:
+            relative_path = os.path.relpath(abs_file_path, AUDIO_DIR)
+            audio_url = f"/audio/{relative_path}"
     except Exception:
         audio_url = None
 

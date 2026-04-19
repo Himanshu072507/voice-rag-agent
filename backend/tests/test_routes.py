@@ -42,7 +42,9 @@ def test_chat_returns_answer_and_audio_url(client, tmp_path):
          patch("main.TTSAgent") as mock_tts_cls:
         mock_ret_cls.return_value.run.return_value = ["Paris is the capital."]
         mock_ans_cls.return_value.run.return_value = "Paris."
-        mock_tts_cls.return_value.run.return_value = str(tmp_path / "sess" / "msg.mp3")
+        import os as _os
+        audio_dir = _os.getenv("AUDIO_DIR", "/tmp/test_audio")
+        mock_tts_cls.return_value.run.return_value = _os.path.join(audio_dir, "sess", "msg.mp3")
 
         response = client.post("/chat", json={
             "session_id": "sess-123",
