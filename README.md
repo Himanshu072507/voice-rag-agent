@@ -24,3 +24,5 @@ Agent Pipeline
 | Retrieval         | Query + session_id     | Top-5 text chunks   |
 | Answer Generation | Query + chunks         | Answer text         |
 | TTS               | Answer text            | MP3 file path       |
+
+<img width="1470" height="956" alt="image" src="https://github.com/user-attachments/assets/a373e2a7-a282-4b00-80aa-96ea42226b93" />
