@@ -1,5 +1,6 @@
 # backend/agents/ingestion_agent.py
 import os
+import json
 import fitz  # PyMuPDF
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_chroma import Chroma
@@ -8,8 +9,9 @@ from langchain_core.documents import Document
 
 
 class IngestPDFAgent:
-    def __init__(self, chroma_dir: str = None):
+    def __init__(self, chroma_dir: str = None, chunks_dir: str = None):
         self.chroma_dir = chroma_dir or os.getenv("CHROMA_DIR", "./chroma_db")
+        self.chunks_dir = chunks_dir or os.getenv("CHUNKS_DIR", "./chunks_store")
 
     def run(self, pdf_bytes: bytes, session_id: str) -> None:
         if not pdf_bytes:
@@ -56,3 +58,8 @@ class IngestPDFAgent:
             collection_name=f"session_{session_id}",
             persist_directory=self.chroma_dir,
         )
+
+        os.makedirs(self.chunks_dir, exist_ok=True)
+        chunks_path = os.path.join(self.chunks_dir, f"{session_id}.json")
+        with open(chunks_path, "w", encoding="utf-8") as f:
+            json.dump(chunks, f, ensure_ascii=False)
