@@ -1,0 +1,42 @@
+[
+  {
+    "question": "When was NimbusCraft founded and by whom?",
+    "ground_truth": "NimbusCraft was founded in 2019 by Elena Marquez and Theo Park in Portland, Oregon."
+  },
+  {
+    "question": "What is the price of the Stratus-7 home weather station?",
+    "ground_truth": "The Stratus-7 home weather station is priced at $349."
+  },
+  {
+    "question": "What are 'Maker Mondays'?",
+    "ground_truth": "Maker Mondays are unstructured personal R&D days on Mondays during which employees are encouraged to explore side projects."
+  },
+  {
+    "question": "How long is parental leave at NimbusCraft and is it paid?",
+    "ground_truth": "Parental leave is 18 weeks, fully paid, for both primary and secondary caregivers."
+  },
+  {
+    "question": "What award did the Stratus-7 win and in what year?",
+    "ground_truth": "The Stratus-7 won the 2022 OutdoorTech Innovation Award."
+  },
+  {
+    "question": "What percentage 401(k) match does NimbusCraft offer?",
+    "ground_truth": "NimbusCraft offers a 6% company match on the 401(k) plan."
+  },
+  {
+    "question": "Which are NimbusCraft's three largest markets by user share?",
+    "ground_truth": "The three largest markets are the United States with 62%, Germany with 14%, and Japan with 9%."
+  },
+  {
+    "question": "What equipment do new hires receive?",
+    "ground_truth": "New hires receive a 14-inch MacBook Pro, a Herman Miller Aeron chair, and a Stratus-7 weather station."
+  },
+  {
+    "question": "What compliance certifications does NimbusCraft hold?",
+    "ground_truth": "NimbusCraft is SOC 2 Type II certified (since 2021) and is GDPR compliant."
+  },
+  {
+    "question": "What programming language is used for the NimbusCraft backend?",
+    "ground_truth": "The NimbusCraft backend is written in Rust."
+  }
+]

@@ -3,7 +3,9 @@ backend/__pycache__/
 backend/**/__pycache__/
 backend/.env
 backend/chroma_db/
+backend/chunks_store/
 backend/audio/
+backend/eval/results.json
 docs/
 *.pyc
 .DS_Store

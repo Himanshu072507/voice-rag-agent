@@ -37,6 +37,7 @@ class ChatRequest(BaseModel):
     message_id: str
 
 
+
 @app.post("/upload")
 async def upload_pdf(file: UploadFile = File(...)):
     if file.content_type != "application/pdf":
@@ -96,6 +97,7 @@ async def chat(request: ChatRequest, x_groq_api_key: Optional[str] = Header(None
         audio_url = None
 
     return {"answer_text": answer_text, "audio_url": audio_url}
+
 
 
 @app.get("/health")
