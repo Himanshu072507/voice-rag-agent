@@ -1,8 +1,7 @@
 # backend/main.py
 import os
 import uuid
-from typing import Optional
-from fastapi import FastAPI, UploadFile, File, HTTPException, Header
+from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
@@ -66,7 +65,7 @@ async def upload_pdf(file: UploadFile = File(...)):
 
 
 @app.post("/chat")
-async def chat(request: ChatRequest, x_groq_api_key: Optional[str] = Header(None)):
+async def chat(request: ChatRequest):
     try:
         retrieval_agent = RetrievalAgent()
         chunks = retrieval_agent.run(query=request.query, session_id=request.session_id)
@@ -76,7 +75,7 @@ async def chat(request: ChatRequest, x_groq_api_key: Optional[str] = Header(None
             raise HTTPException(status_code=404, detail="Session not found. Please upload a PDF first.")
         raise HTTPException(status_code=502, detail="Failed to retrieve context.")
 
-    answer_agent = AnswerAgent(api_key=x_groq_api_key)
+    answer_agent = AnswerAgent()
     answer_text = answer_agent.run(query=request.query, chunks=chunks)
 
     tts_agent = TTSAgent()
