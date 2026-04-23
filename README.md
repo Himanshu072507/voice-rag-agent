@@ -83,5 +83,11 @@ cd frontend
 npm install
 npm run dev
 ```
+Before implementing Evals:
 
 <img width="1470" height="956" alt="image" src="https://github.com/user-attachments/assets/a373e2a7-a282-4b00-80aa-96ea42226b93" />
+
+After implementing Evals:
+
+<img width="1470" height="956" alt="image" src="https://github.com/user-attachments/assets/5b0b168d-1627-4f11-a6e0-3d3e4d0eb535" />
+
